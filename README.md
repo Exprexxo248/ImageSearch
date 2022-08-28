@@ -8,9 +8,17 @@ Mini Image Crawl program from website: [Bits's Website](https://bitis.com.vn/). 
 I came up with a way to do this crawl, I use ChromeDriverManager as Seleium Driver. For each div containing objects, I get the link of each product, then reach each product's page and get information from the tags. But this approach soon be blocked by anti-DDOS mechanism. 
 Therefore I have redirected to only get information from the aggregate product page. But it also have a problem when request the website, it's need time to load the images when scroll, so I have a solution to prevent that problems by using `driver.implicitly_wait()` after each scroll and information saving action.
 The `Shoeobject` have the structure:
+Object Format:
 ```apib
 {
+  _id : "1209380129204",
+  name: "Hunter X1"
+  image_url: "https://..."
+}
 
+mapping_format:
+{
+  image_url : _id
 }
 ```
 
