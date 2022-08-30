@@ -8,21 +8,22 @@ This is the demo Search Machine for Shoe.
 Mini Image Crawl program from website: [Bitis's Website](https://bitis.com.vn/). With this module, I recommend using the Selenium tool to crawl information from dynamic web pages.
 
 I came up with a way to do this crawl, I use ChromeDriverManager as Selenium Driver. For each div containing objects, I get the link of each product, then reach each product's page and get information from the tags. But this approach soon is blocked by anti-DDOS mechanism. 
-Therefore I have redirected only to get information from the aggregate product page. But it also has a problem when requesting the website, it need time to load the images when scrolling, so I have a solution to prevent that problem by using `driver.implicitly_wait()` after each scroll and information saving action. 
+Therefore I have redirected only to get information from the aggregate product page. But it also has a problem when requesting the website, it need time to load the images when scrolling, so I have a solution to prevent that problem by using **`driver.implicitly_wait()`** after each scroll and information saving action. 
 Note: In this demo, I just take the links of the images and then process them sequentially, no need to download all the images, just the links of the images.
 The `ShoeObject` has the structure:
-Object Format:
+
 ```json
+// Object Format:
 {
   _id : "1209380129204",
   name: "Hunter X1"
   image_url: "https://..."
 }
 
-mapping format:
+// Mapping Format:
 {
-  "http://....1" : 1,
-  "http://....2" : 2,
+  "http://....1" : "1",
+  "http://....2" : "2",
   ...
 }
 ```
@@ -87,11 +88,43 @@ I re-use the template app from our past development with a nearly similar to tha
 ├── README.md
 └── requirements.txt
 ```
-Note: In Python, the `__init__.py` file will make the folder become a module, which will help you a lot in importing files and modules.
+Note: In Python, the **`__init__.py`** file will make the folder become a module, which will help you a lot in importing files and modules.
 The changes that I have made are to reuse the template.
 ## Database
-In the NFT case, we use the Rarible API to retrieve the information of each NFT item. But in this demo, we use the demo database loaded from file: `./static/Data/objects.json`.
+In the NFT case, we use the Rarible API to retrieve the information of each NFT item. But in this demo, we use the demo database loaded from file: **`./static/Data/objects.json`**.
 
 
 
-## Core/Config file 
+## Core/Config
+**`config.py`** will find and load all the defined variables from **`.env`** into variables in class **`Setttings`**.
+
+For example
+```python 
+# .env
+FOO="something"
+...
+
+# ./core/config
+class Settings(BaseSettings):
+    FOO: str
+    ...
+```
+
+## Routes/item.py
+This is the implementation of each route in the backend app. In the demo app, it is unnecessary to have a crawler run scheduled. So, the only route `/api/v1/upload` and remove the 
+```python
+@router.post("/api/v1/upload")
+```
+It will receive a photo(or image) from the user and return the object matched.
+After the searching process done, it will return the list of object Ids named **`result`**.
+Then the function **`get_model_predicted_results()`** will look up and found the result items.
+you can modify the function for your specific database or file systems.
+
+For example, I have changed that to look up in my own **Shoe Database**
+
+```python
+def get_model_predicted_results(ids):
+    return shoe_repositories.retrieve(ids)
+```
+
+
