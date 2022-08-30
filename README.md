@@ -13,11 +13,11 @@ Note: In this demo, I just take the links of the images and then process them se
 The `ShoeObject` has the structure:
 
 ```json
-// Object Format:
+// Object Format
 {
-  _id : "1209380129204",
-  name: "Hunter X1"
-  image_url: "https://..."
+  "_id" : "1209380129204",
+  "name" : "Hunter X1"
+  "image_url" : "https://..."
 }
 
 // Mapping Format:
