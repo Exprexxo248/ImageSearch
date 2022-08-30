@@ -7,7 +7,6 @@ import os
 import time
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from tensorflow.keras.applications.efficientnet import EfficientNetB4, preprocess_input
 
 # from tensorflow.keras.applications.efficientnet import EfficientNetB4, preprocess_input
@@ -70,7 +69,7 @@ class MyEffNetModel:
             self.my_data_name.append(img_id)
 
     def save(self, path="./"):
-        pickle.dump(self.my_data, open(os.path.join(path, "vectors.pkl"), "wb"))
+        pickle.dump(self.my_data, open(os.path.join(path, "features.pkl"), "wb"))
         pickle.dump(self.my_data_name, open(os.path.join(path, "keys.pkl"), "wb"))
 
     """

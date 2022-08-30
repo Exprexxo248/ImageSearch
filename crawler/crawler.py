@@ -13,6 +13,7 @@ import time
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.maximize_window()
+waiter = WebDriverWait(driver=driver, timeout=2)
 
 page_url = "https://bitis.com.vn/collections/nam"
 driver.get(url=page_url)
@@ -22,41 +23,35 @@ links = []
 
 button = driver.find_element(by=By.CSS_SELECTOR, value=".btn-loadmore")
 
-while True:
-    driver.execute_script(
-        "window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})"
-    )
-    driver.implicitly_wait(0.1)
-    try:
-        button = driver.find_element(by=By.CSS_SELECTOR, value=".btn-loadmore").click()
-    except:
-        print("Cannot find more")
-        break
-
-driver.execute_script("window.scrollTo(0, 0)")
-
-
-element_xpath = '//*/div[@class="row listProduct-row listProduct-resize listProduct-filter loaded"]/div[{}]'
-image_xpath = './/*[@class="prod-img first-image"]/picture/img'
+div_xpath = '//*[@id="collection-body"]/div[3]/div/div[2]/div[2]/div[1]/div[{}]'
+image_xpath = './/*[@class="product-boxImg-flex"]/a/*/picture/img'
 
 while True:
-    driver.execute_script(
-        "window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})"
-    )
     i += 1
+    div = None
     try:
-        element = driver.find_element(by=By.XPATH, value=element_xpath.format(i))
-        temp = element.find_element(by=By.XPATH, value=image_xpath)
-        driver.implicitly_wait(0.2)
-        href = temp.get_attribute("src")
-        print(href)
+        div = WebDriverWait(driver=driver, timeout=2).until(
+            EC.presence_of_element_located((By.XPATH, div_xpath.format(i)))
+        )
+        driver.execute_script("arguments[0].scrollIntoView();", div)
+        location = driver.execute_script("return window.pageYOffset;")
+        img = WebDriverWait(driver=div, timeout=5).until(
+            EC.visibility_of_element_located((By.XPATH, image_xpath))
+        )
+
+        href = img.get_attribute("src")
         links.append(href)
-
     except:
-        break
+        try:
+            button = driver.find_element(
+                by=By.CSS_SELECTOR, value=".btn-loadmore"
+            ).click()
+            i -= 1
+        except:
+            print("Cannot find more")
+            break
 
-
-print(len(links))
+print("Image Crawled: ", len(links))
 
 
 _id = 0
