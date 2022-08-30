@@ -40,11 +40,11 @@ mapping format:
 ...
 ```
 ## Extractor
-After crawling the necessary information, the next step is to extract the features of the images using the appropriate model. The model used is EfficientnetB4, which has 1792 features, stored as a 1792-dimensional array. These vectors are then saved in a file containing the data and a file containing the names in pairs: `feature.pkl` and 
-Tips: You can replace the feature extraction model by changing 'self.model' present in class `MyEfficientModel` and `FeatureExtractor` and keep in mind that these two models must be the same.
+After crawling the necessary information, the next step is to extract the features of the images using the appropriate model. The model used is EfficientnetB4, which has 1792 features, stored as a 1792-dimensional array. These vectors are then saved in `vectors.pkl` and names are stored in: `feature.pkl`. 
 
+Tips: You can replace the feature extraction model by changing `self. model` present in class `MyEfficientModel` and `FeatureExtractor` and keep in mind that these two models must be the same.
 
-
+***
 # Search Engine 
 I re-use the template app from our past development with a nearly similar to that structure.
 ```
@@ -87,8 +87,11 @@ I re-use the template app from our past development with a nearly similar to tha
 ├── README.md
 └── requirements.txt
 ```
-Note: In Python, the `__init__.py` file will make the folder become a module, that will help you a lot in import file and module.
-The changed that I have made to reuse the template.
+Note: In Python, the `__init__.py` file will make the folder become a module, which will help you a lot in importing files and modules.
+The changes that I have made are to reuse the template.
 ## Database
-In the NFT case, we use the Rarible API, But in this demo, we use the demo database
+In the NFT case, we use the Rarible API to retrieve the information of each NFT item, But in this demo, we use the demo database loaded from file: `./static/Data/objects.json`.
+
+
+
 ## Core/Config file 
